@@ -1,5 +1,6 @@
 var auth = require('./auth');
 var rest = require('restler');
+var menu = require('./menu');
 var util = require('./util');
 var weather = require('./weather');
 var traffic = require('./traffic');
@@ -61,9 +62,10 @@ function parseCmd(input, phone, msgObj, callback) {
                 return faultResponse(msgObj);
             case 'help':
                 return help_message;
-            case 'mealcr/ed':
+            case 'mealcred':
+            break;
             case 'menu':
-                return menuResponse(msgObj);
+                return menu.menuResponse(msgObj);
             case 'nextbus':
                 var busStop = cmd[1] ? cmd[1] : traffic.defaultBusStop;
                 return traffic.busStopQuery(busStop, function(data) {
@@ -73,11 +75,6 @@ function parseCmd(input, phone, msgObj, callback) {
                 return weather.getWeather();
             break;
     }
-}
-
-function menuResponse(msgObj) {
-    var imgURL = "/menu.jpg";
-    return imgURL;
 }
 
 function faultResponse(msgObj) { //FAULT <LVL> <DETAILS>
