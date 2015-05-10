@@ -72,7 +72,7 @@ function parseCmd(input, msgObj) {
 }
 
 function menuResponse(msgObj) {
-    var imgURL = 'menu.jpg';
+    var imgURL = "/menu.jpg";
     return imgURL;
 }
 
