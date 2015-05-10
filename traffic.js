@@ -6,6 +6,7 @@ var ltaCredFile = './private/lta_credentials.json';
 var ltaCredentials = jf.readFileSync(ltaCredFile);
 
 var busStops = [19059, 19051, 17099, 17091];
+var defaultBusStop = 19059;
 
 var busStopUrl = 'http://datamall2.mytransport.sg/ltaodataservice/BusArrival?BusStopID=' ;
 
@@ -15,6 +16,9 @@ var busStopHeaders = {
 };
 
 function busStop(id, callback) {
+    if (callback === undefined) {
+        callback = console.log;
+    }
     var req_url = busStopUrl + id.toString();
     var req_options = {"headers": busStopHeaders};
     var response = send(req_url, req_options, callback);
@@ -25,7 +29,7 @@ function process_info(data, callback) {
     var processed_data = "Buses in operations:";
     data.Services.forEach(function(bus) {
     if (bus.Status === 'In Operation') {
-        processed_data += '\n' + bus.ServiceNo + " \t- " + util.timeLeftMin(new Date(bus.NextBus.EstimatedArrival)) + ", " + util.timeLeftMin(new Date(bus.SubsequentBus.EstimatedArrival));
+        processed_data += '\n' + bus.ServiceNo + " - " + util.timeLeftMin(new Date(bus.NextBus.EstimatedArrival)) + ", " + util.timeLeftMin(new Date(bus.SubsequentBus.EstimatedArrival));
             }
     });
     callback(processed_data);
@@ -38,6 +42,7 @@ function send(req_url, req_options, callback) {
 }
 
 module.exports = {
-    'busStopQuery': busStop
+    'busStopQuery': busStop,
+    'defaultBusStop': defaultBusStop
 }
 
